@@ -1,5 +1,7 @@
 # Informe de Estado de Planta
 
+[![QualityOS](https://img.shields.io/badge/QualityOS-calidad_en_planta-0f5c6e?style=flat-square)](https://github.com/roca-byte)
+
 PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) desde el celular durante la recorrida. Se cargan sector, fotos, descripción y acción correctiva de cada desvío, y la app genera un **PDF** con las fotos acomodadas solas. Opcionalmente, una IA ayuda a mejorar la redacción.
 
 ## Características

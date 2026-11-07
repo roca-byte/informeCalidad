@@ -2,16 +2,26 @@
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Informe de Estado de Planta</title>
-<meta name="theme-color" content="#1f6feb">
+<meta name="theme-color" content="#0f5c6e">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 <script>try{var t=localStorage.getItem('informe_tema');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="jspdf.umd.min.js"></script>
-</head><body><main>
+</head><body>
+<header class="q-topbar">
+  <div class="q-brand">
+    <span class="q-mark" aria-hidden="true">Q</span>
+    <div class="q-brand-text">
+      <h1>Informe de Estado de Planta</h1>
+      <span>QualityOS · Calidad</span>
+    </div>
+  </div>
+  <button class="q-theme" id="tema" aria-label="Cambiar tema claro/oscuro">🌙</button>
+</header>
+<main>
 <img id="logoImg" src="logo.png" alt="" hidden>
-<div class="top"><h1>Informe de Estado de Planta</h1><button class="ghost" id="tema" aria-label="Cambiar tema claro/oscuro">🌙</button></div>
 <details class="card cfg" id="cfg"><summary>⚙️ Configuración <span id="cfgRes"></span></summary>
 <label for="empresa">Nombre de la empresa (va en el encabezado del PDF si no cargás logo)</label><input id="empresa" placeholder="Ej: Alimentos del Sur S.A." style="max-width:280px" autocomplete="organization">
 <label>Logo de la empresa (opcional, reemplaza al nombre en el encabezado)</label>
