@@ -33,7 +33,6 @@ HTML + CSS + JavaScript puro, **sin frameworks ni paso de build**. Mobile-first.
 ├── app.js                # Lógica: carga, fotos, PDF, IA
 ├── brand.js              # Marca: empresa, color de acento y textos fijos del PDF
 ├── config.js             # URL del Worker de IA (IA_ENDPOINT)
-├── logo.png              # Logo para el PDF
 ├── manifest.json         # Configuración PWA
 ├── sw.js                 # Service worker (caché offline)
 ├── jspdf.umd.min.js      # Librería de PDF
@@ -76,7 +75,7 @@ const BRAND = {
 };
 ```
 
-Para cambiar el logo, reemplazar `logo.png` conservando el nombre. Detalles en [GUIA_MARCA.md](GUIA_MARCA.md).
+El repositorio no incluye logo: el PDF usa `empresa` como texto en el encabezado. Para usar un logo propio, agregar un archivo `logo.png` en la raíz (y sumarlo a `FILES` en `sw.js`). Detalles en [GUIA_MARCA.md](GUIA_MARCA.md).
 
 ## IA (opcional)
 

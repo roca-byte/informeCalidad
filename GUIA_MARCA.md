@@ -3,15 +3,17 @@
 El PDF ahora imita la plantilla Word de la empresa: logo arriba, línea de color debajo de cada título, tipografía monoespaciada en el cuerpo y pie de página con numeración. Todo eso se ajusta en dos archivos, sin tocar `app.js`.
 
 ## 1. El logo
-`logo.png` ya tiene el logo real de la empresa (lo extraje de tu PDF de plantilla). Si en algún momento conseguís una versión de mejor calidad, o cambia el isologo, reemplazalo:
+El repositorio **no incluye logo**: en el encabezado del PDF se imprime como texto el valor de `BRAND.empresa` (en `brand.js`).
 
-1. Conseguí el logo oficial en PNG, con fondo transparente si es posible. Que no sea muy angosto ni muy alto (una proporción parecida a un rectángulo horizontal se ve mejor); una altura real de unos 300-400 px suele andar bien.
-2. En GitHub, entrá al archivo `logo.png` del repositorio → ícono de lápiz o "Add file → Upload files" → subí tu archivo con el mismo nombre, `logo.png`, para no tener que tocar el código.
-3. Esperá que GitHub Pages actualice (uno o dos minutos) y probá generar un PDF.
+Si querés usar un logo propio:
 
-Si en algún momento `logo.png` no carga (por ejemplo, lo borraste), la app no rompe: usa el nombre de `BRAND.empresa` como texto, en su lugar.
+1. Conseguí el logo en PNG, con fondo transparente si es posible. Que no sea muy angosto ni muy alto (una proporción parecida a un rectángulo horizontal se ve mejor); una altura real de unos 300-400 px suele andar bien.
+2. Guardalo como `logo.png` en la raíz del proyecto, para no tener que tocar el código.
+3. Agregá `'logo.png'` a la lista `FILES` de `sw.js` y subí el número de versión `V`, así el celular lo guarda para usarlo sin conexión.
 
-**Sobre tenerlo en un repositorio público:** un isologo es material de marca pensado para mostrarse, así que no es un dato sensible como una clave o un número de cuenta. Igual, si preferís no tener el logo ni el nombre "la empresa" visibles en el código fuente público, dos opciones: (a) borrar `logo.png` del repo (la app cae al texto `BRAND.empresa` automáticamente) y editar `brand.js`, o (b) mover el hosting a Cloudflare Pages o Netlify, que en su plan gratuito permiten desplegar desde un repositorio **privado** de GitHub (el sitio publicado queda igual de accesible por su link, pero el código fuente no es público).
+Si `logo.png` no existe o no carga, la app no rompe: usa el nombre de `BRAND.empresa` como texto, en su lugar.
+
+**Repositorio público:** no subas logos ni nombres de empresas reales si el código está en un repositorio público. Si necesitás la versión con marca, mantenela en una copia local o en un repositorio privado.
 
 ## 2. Ajustar colores y textos fijos
 Todo esto está en `brand.js`, con comentarios en cada línea:
