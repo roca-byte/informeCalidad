@@ -4,6 +4,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 
 ## Características
 
+- **Configuración de la empresa** (panel ⚙️): nombre de la empresa, logo y departamento. Se cargan una sola vez desde la app, quedan guardados en el dispositivo y se usan en todos los informes. Se abre solo la primera vez.
 - **Carga de desvíos en el momento**: sector (con autocompletado de sectores ya usados), fotos de la cámara o galería, descripción y acciones correctivas.
 - **Fotos**: se reducen a 1200 px (JPEG) y se pueden reordenar o quitar antes de guardar.
 - **Edición**: cada desvío guardado se puede editar o eliminar antes de generar el informe.
@@ -55,9 +56,10 @@ Abrir `http://localhost:8000`. Para usarla en el celular, publicarla en GitHub P
 
 Flujo de trabajo:
 
-1. Completar fecha y nombre.
-2. Por cada desvío: sector, fotos, descripción y acción correctiva → **Agregar desvío**.
-3. **Generar PDF** al terminar la recorrida.
+1. La primera vez: abrir **⚙️ Configuración** y cargar el nombre de la empresa, el logo (opcional) y el departamento.
+2. Completar fecha y nombre.
+3. Por cada desvío: sector, fotos, descripción y acción correctiva → **Agregar desvío**.
+4. **Generar PDF** al terminar la recorrida.
 4. **Empezar informe nuevo** para limpiar el borrador.
 
 ## Personalización de la marca
@@ -75,7 +77,7 @@ const BRAND = {
 };
 ```
 
-El repositorio no incluye logo: el PDF usa `empresa` como texto en el encabezado. Para usar un logo propio, agregar un archivo `logo.png` en la raíz (y sumarlo a `FILES` en `sw.js`). Detalles en [GUIA_MARCA.md](GUIA_MARCA.md).
+Lo más simple es cargar el nombre de la empresa y el logo desde el panel **⚙️ Configuración** de la app: no hace falta tocar el código. Los valores de `brand.js` quedan como respaldo cuando la configuración está vacía. Otra opción es agregar un archivo `logo.png` en la raíz (y sumarlo a `FILES` en `sw.js`). Detalles en [GUIA_MARCA.md](GUIA_MARCA.md).
 
 ## IA (opcional)
 

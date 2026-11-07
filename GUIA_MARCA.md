@@ -2,10 +2,17 @@
 
 El PDF ahora imita la plantilla Word de la empresa: logo arriba, línea de color debajo de cada título, tipografía monoespaciada en el cuerpo y pie de página con numeración. Todo eso se ajusta en dos archivos, sin tocar `app.js`.
 
-## 1. El logo
-El repositorio **no incluye logo**: en el encabezado del PDF se imprime como texto el valor de `BRAND.empresa` (en `brand.js`).
+## 1. Nombre de la empresa y logo (desde la app)
+La forma más simple: en la app, abrí **⚙️ Configuración** (arriba de todo) y cargá:
 
-Si querés usar un logo propio:
+- **Nombre de la empresa**: se imprime en el encabezado si no hay logo.
+- **Logo**: PNG o JPG; la app lo achica sola y conserva la transparencia. Reemplaza al nombre en el encabezado de cada página.
+- **Departamento**: la tercera línea de la portada.
+
+Queda guardado en ese celular y se usa en todos los informes. No se sube a ningún lado.
+
+### Alternativa: logo fijo en el código
+Si no se cargó nada en Configuración, el PDF usa `logo.png` (si existe) o, si no, el texto de `BRAND.empresa` (en `brand.js`). Para dejar un logo fijo en tu copia:
 
 1. Conseguí el logo en PNG, con fondo transparente si es posible. Que no sea muy angosto ni muy alto (una proporción parecida a un rectángulo horizontal se ve mejor); una altura real de unos 300-400 px suele andar bien.
 2. Guardalo como `logo.png` en la raíz del proyecto, para no tener que tocar el código.

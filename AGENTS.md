@@ -8,7 +8,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 ## Stack y restricciones
 - HTML + CSS + JavaScript puro. **Sin frameworks ni paso de build.**
 - Mobile-first, funciona offline (service worker con caché). PDF con jsPDF 2.5.1 incluido local (`jspdf.umd.min.js`).
-- Datos en `localStorage` (clave `informe_planta_v1`); fotos reducidas a 1200 px, JPEG.
+- Datos en `localStorage`: desvíos en `informe_planta_v1`; configuración de la empresa en `informe_config` (`{empresa, depto, logo:{d,w,h}}`, logo en PNG reducido a máx. 800x300 px); fotos reducidas a 1200 px, JPEG.
 - Hosting: GitHub Pages (rutas siempre **relativas**). Interfaz y comentarios en español.
 - Alcance mínimo (MVP): no agregar funciones no pedidas ni dependencias nuevas sin avisar.
 
@@ -20,7 +20,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 - `GUIA_IA.md`: guía de puesta en marcha de la IA. `GUIA_MARCA.md`: cómo reemplazar el logo y ajustar colores/textos.
 
 ## Formato del informe (respetar)
-Replica la plantilla Word de la empresa (branding). Los textos fijos y colores están en `brand.js`; el logo es `logo.png` (si no carga, se usa `BRAND.empresa` como texto). No hardcodear estos valores en `app.js`: se editan solo en `brand.js`.
+Replica la plantilla Word de la empresa (branding). El usuario carga empresa, logo y departamento en el panel **⚙️ Configuración** (`cfg` en `app.js`). Orden de prioridad del encabezado: logo de Configuración → `logo.png` → nombre de empresa de Configuración → `BRAND.empresa`. El departamento usa `BRAND.departamento` si está vacío. Los demás textos fijos y colores están en `brand.js`; no hardcodearlos en `app.js`. El logo se agrega con compresión (`'FAST'`): sin ella jsPDF lo guarda sin comprimir y el PDF pesa ~750 KB más.
 - **Encabezado en cada página:** logo (o nombre de empresa) arriba a la izquierda + línea gris fina debajo. Se redibuja en cada salto de página (`drawHeader()`).
 - **Portada (solo página 1):** etiqueta roja con letras espaciadas ("I N F O R M E  |  C A L I D A D"), título en Times bold 22pt a dos líneas, meta en Courier ("FECHA dd/mm/aaaa", nombre en mayúsculas, departamento), párrafo "Objetivo del relevamiento" fijo.
 - **Fuente del cuerpo:** Courier (monoespaciada) en todo el contenido de los desvíos; el título usa Times; la etiqueta roja y el nombre de empresa (fallback sin logo) usan Helvetica.

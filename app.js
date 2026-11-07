@@ -13,6 +13,32 @@ const temaOscuro=()=>(document.documentElement.dataset.theme||(matchMedia('(pref
 const pintarTema=()=>{$('tema').textContent=temaOscuro()?'☀️':'🌙'};
 $('tema').addEventListener('click',()=>{const t=temaOscuro()?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem('informe_tema',t)}catch(e){}pintarTema()});
 pintarTema();
+/* Configuración de la empresa: se guarda en el dispositivo y aplica a todos los informes */
+const CKEY='informe_config';
+let cfg={};try{cfg=JSON.parse(localStorage.getItem(CKEY)||'{}')}catch(e){}
+const saveCfg=()=>{try{localStorage.setItem(CKEY,JSON.stringify(cfg));return true}catch(e){msg('No hay espacio para guardar la configuración. Probá con un logo más chico.');return false}};
+$('empresa').value=cfg.empresa||'';
+$('depto').value=cfg.depto||'';$('depto').placeholder=BRAND.departamento;
+function pintarCfg(){
+  const l=cfg.logo;$('logoPrev').hidden=$('logoQuitar').hidden=!l;if(l)$('logoPrev').src=l.d;
+  $('logoTxt').textContent=l?'Cambiar logo':'Elegir logo';
+  $('cfgRes').textContent=cfg.empresa?'· '+cfg.empresa+(l?' (con logo)':''):(l?'· con logo':'· falta cargar la empresa');
+}
+['empresa','depto'].forEach(k=>$(k).addEventListener('input',()=>{cfg[k]=$(k).value.trim();saveCfg();pintarCfg()}));
+// El logo se reduce (máx. 800x300 px) y se guarda en PNG para conservar la transparencia
+$('logoFile').addEventListener('change',e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+    const k=Math.min(1,800/im.width,300/im.height),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+    const prev=cfg.logo;cfg.logo={d:c.toDataURL('image/png'),w:c.width,h:c.height};
+    if(saveCfg())msg('Logo guardado.');else cfg.logo=prev;pintarCfg()};
+    im.onerror=()=>msg('No se pudo leer esa imagen.');im.src=r.result};r.readAsDataURL(f);
+});
+$('logoQuitar').onclick=()=>{delete cfg.logo;saveCfg();pintarCfg();msg('Logo quitado.')};
+if(!cfg.empresa&&!cfg.logo)$('cfg').open=true;
+pintarCfg();
+
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){msg('No hay espacio para guardar el borrador en el celular. Generá el PDF antes de seguir.')}}
 
 function resize(f){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res({d:c.toDataURL('image/jpeg',.75),w:c.width,h:c.height})};im.src=r.result};r.readAsDataURL(f)})}
@@ -101,18 +127,21 @@ $('pdf').onclick=async()=>{
   const nombre=$('nombre').value.trim();try{localStorage.setItem(NKEY,nombre)}catch(e){}
   const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),W=210,M=20,CW=W-2*M;let y=0;
   const [yy,mm,dd]=$('fecha').value.split('-'),fecha=`${dd}/${mm}/${yy}`;
-  const logoOk=logoImgEl&&logoImgEl.complete&&logoImgEl.naturalWidth>0;
+  // Logo: primero el cargado en Configuración; si no, logo.png del repo (opcional)
+  const logo=cfg.logo?{src:cfg.logo.d,w:cfg.logo.w,h:cfg.logo.h}
+    :(logoImgEl&&logoImgEl.complete&&logoImgEl.naturalWidth>0)?{src:logoImgEl,w:logoImgEl.naturalWidth,h:logoImgEl.naturalHeight}:null;
+  const empresa=(cfg.empresa||'').trim()||BRAND.empresa,depto=(cfg.depto||'').trim()||BRAND.departamento;
   const accentRGB=hex2rgb(BRAND.colorAcento);
 
   function drawHeader(){
     let bottom=20;
-    if(logoOk){
-      const maxH=14,ratio=logoImgEl.naturalWidth/logoImgEl.naturalHeight;let h=maxH,w=h*ratio;
+    if(logo){
+      const maxH=14,ratio=logo.w/logo.h;let h=maxH,w=h*ratio;
       if(w>70){w=70;h=w/ratio}
-      doc.addImage(logoImgEl,'PNG',M,12,w,h);bottom=12+h;
+      doc.addImage(logo.src,'PNG',M,12,w,h,'logo','FAST');bottom=12+h;
     }else{
       doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(40);
-      doc.text(BRAND.empresa,M,20);doc.setTextColor(0);bottom=22;
+      doc.text(empresa,M,20);doc.setTextColor(0);bottom=22;
     }
     doc.setDrawColor(200);doc.setLineWidth(.3);doc.line(M,bottom+4,W-M,bottom+4);
     y=bottom+16;
@@ -147,7 +176,7 @@ $('pdf').onclick=async()=>{
   BRAND.tituloInforme.split('\n').forEach(l=>{doc.text(l,M,y);y+=9});
   y+=4;
   doc.setFont('courier','normal');doc.setFontSize(10);
-  [`FECHA ${fecha}`,nombre?nombre.toUpperCase():'',BRAND.departamento].filter(Boolean).forEach(l=>{doc.text(l,M,y);y+=5.5});
+  [`FECHA ${fecha}`,nombre?nombre.toUpperCase():'',depto].filter(Boolean).forEach(l=>{doc.text(l,M,y);y+=5.5});
   y+=4;
   lines(BRAND.objetivo,10.5,'normal');y+=6;
 
@@ -175,4 +204,4 @@ $('pdf').onclick=async()=>{
 };
 render();
 
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=9'));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=10'));

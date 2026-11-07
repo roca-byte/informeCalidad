@@ -12,6 +12,13 @@
 </head><body><main>
 <img id="logoImg" src="logo.png" alt="" hidden>
 <div class="top"><h1>Informe de Estado de Planta</h1><button class="ghost" id="tema" aria-label="Cambiar tema claro/oscuro">🌙</button></div>
+<details class="card cfg" id="cfg"><summary>⚙️ Configuración <span id="cfgRes"></span></summary>
+<label for="empresa">Nombre de la empresa (va en el encabezado del PDF si no cargás logo)</label><input id="empresa" placeholder="Ej: Alimentos del Sur S.A." style="max-width:280px" autocomplete="organization">
+<label>Logo de la empresa (opcional, reemplaza al nombre en el encabezado)</label>
+<div class="row" style="margin-top:0;align-items:center"><img id="logoPrev" alt="Logo cargado" hidden><label class="btn" style="margin:0;color:var(--tx)">🖼️ <span id="logoTxt">Elegir logo</span><input type="file" id="logoFile" accept="image/*" hidden></label><button class="ghost danger" id="logoQuitar" hidden>Quitar logo</button></div>
+<label for="depto">Departamento (tercera línea de la portada)</label><input id="depto" style="max-width:280px">
+<p class="hint">Se guarda en este dispositivo y se usa en todos los informes.</p>
+</details>
 <label for="fecha" style="margin-top:0">Fecha de emisión</label><input type="date" id="fecha" style="max-width:200px">
 <label for="nombre">Nombre y apellido (va en el encabezado y pie del PDF)</label><input id="nombre" placeholder="Ej: Roca Maximiliano" style="max-width:280px;margin-bottom:14px">
 
