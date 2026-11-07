@@ -1,3 +1,5 @@
+/* El atributo hidden siempre gana sobre display de botones y etiquetas. */
+[hidden]{display:none!important}
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f5f7;--card:#fff;--tx:#1b1f24;--mut:#667085;--ac:#1f6feb;--bd:#d5dae1;--dg:#c62828}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111418;--card:#1b2027;--tx:#e8eaed;--mut:#9aa4b2;--ac:#5b9bff;--bd:#2f3742;--dg:#ef7b7b}}
 :root[data-theme="dark"]{--bg:#111418;--card:#1b2027;--tx:#e8eaed;--mut:#9aa4b2;--ac:#5b9bff;--bd:#2f3742;--dg:#ef7b7b}
