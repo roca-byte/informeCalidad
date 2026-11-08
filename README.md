@@ -4,6 +4,8 @@
 
 PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) desde el celular durante la recorrida. Se cargan sector, fotos, descripción y acción correctiva de cada desvío, y la app genera un **PDF** con las fotos acomodadas solas. Opcionalmente, una IA ayuda a mejorar la redacción.
 
+**App publicada:** https://roca-byte.github.io/informeCalidad/
+
 ## Características
 
 - **Configuración de la empresa** (panel ⚙️): nombre de la empresa, logo y departamento. Se cargan una sola vez desde la app, quedan guardados en el dispositivo y se usan en todos los informes. Se abre solo la primera vez.
@@ -62,7 +64,7 @@ Flujo de trabajo:
 2. Completar fecha y nombre.
 3. Por cada desvío: sector, fotos, descripción y acción correctiva → **Agregar desvío**.
 4. **Generar PDF** al terminar la recorrida.
-4. **Empezar informe nuevo** para limpiar el borrador.
+5. **Empezar informe nuevo** para limpiar el borrador.
 
 ## Personalización de la marca
 
