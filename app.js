@@ -217,6 +217,22 @@ $('pdf').onclick=async()=>{
     y+=4;
   });
 
+  // Resumen de auditoría: agrupa los desvíos por punto de la lista (ordenados por N°),
+  // para ver de un vistazo qué requisitos ISO tuvieron desvíos. Solo si algún desvío tiene punto.
+  const grupos={};items.forEach((it,i)=>{if(it.pto)(grupos[it.pto.n]=grupos[it.pto.n]||{p:it.pto,ds:[]}).ds.push(i+1)});
+  const ns=Object.keys(grupos).map(Number).sort((a,b)=>a-b);
+  if(ns.length){
+    y+=2;need(20);
+    doc.setFont('courier','bold');doc.setFontSize(12.5);doc.text('RESUMEN POR PUNTO DE LA LISTA',M,y);
+    doc.setDrawColor(...accentRGB);doc.setLineWidth(.5);doc.line(M,y+2,W-M,y+2);y+=9;
+    ns.forEach(n=>{const g=grupos[n];need(18);
+      lines(`N° ${n} · ${g.p.p}`,10.5,'bold');
+      lines(`Requisito ISO 9001:2015: ${g.p.r}`,10.5,'normal');
+      lines(`Desvío${g.ds.length>1?'s':''} N° ${g.ds.join(', ')}`,10.5,'italic');y+=3});
+    const sin=items.length-ns.reduce((t,n)=>t+grupos[n].ds.length,0);
+    lines(`Puntos con desvío: ${ns.length} · Desvíos sin punto de la lista: ${sin}`,10.5,'normal');
+  }
+
   const total=doc.internal.getNumberOfPages();
   for(let p=1;p<=total;p++){
     doc.setPage(p);doc.setFont('courier','normal');doc.setFontSize(8);doc.setTextColor(120);
@@ -230,4 +246,4 @@ $('pdf').onclick=async()=>{
 };
 render();
 
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=11'));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=12'));

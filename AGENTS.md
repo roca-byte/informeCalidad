@@ -14,7 +14,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 
 ## Archivos
 - `index.html`, `style.css`, `app.js`: la app. `config.js`: URL del Worker (`IA_ENDPOINT`).
-- `checklist.js`: lista de verificación de auditoría interna ISO 9001 (global `CHECKLIST`, 37 puntos por categoría). Opcional: se activa en Configuración (`cfg.auditoria`). Cada desvío puede guardar una **copia** del punto en `pto` (`{n,p,c,r}`) para que los informes viejos no cambien si se edita la lista; en el PDF sale bajo el título del desvío (punto, criterio y requisito ISO) y también se pasa como contexto a la IA.
+- `checklist.js`: lista de verificación de auditoría interna ISO 9001 (global `CHECKLIST`, 37 puntos por categoría). Opcional: se activa en Configuración (`cfg.auditoria`). Cada desvío puede guardar una **copia** del punto en `pto` (`{n,p,c,r}`) para que los informes viejos no cambien si se edita la lista; en el PDF sale bajo el título del desvío (punto, criterio y requisito ISO) y también se pasa como contexto a la IA. Al final del PDF, si algún desvío tiene punto, va un "RESUMEN POR PUNTO DE LA LISTA" (punto, requisito ISO y N° de desvíos).
 - `brand.js`: nombre de empresa, color de acento y textos fijos del PDF. `logo.png`: logo opcional (no incluido en el repo).
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA.
 - `worker.js`: Cloudflare Worker que usa el binding de Workers AI (no lo carga la app).
