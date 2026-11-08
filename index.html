@@ -26,6 +26,8 @@
 <label>Logo de la empresa (opcional, reemplaza al nombre en el encabezado)</label>
 <div class="row" style="margin-top:0;align-items:center"><img id="logoPrev" alt="Logo cargado" hidden><label class="btn" style="margin:0;color:var(--tx)">🖼️ <span id="logoTxt">Elegir logo</span><input type="file" id="logoFile" accept="image/*" hidden></label><button class="ghost danger" id="logoQuitar" hidden>Quitar logo</button></div>
 <label for="depto">Departamento (tercera línea de la portada)</label><input id="depto" style="max-width:280px">
+<label class="chk"><input type="checkbox" id="auditoria"> Usar la lista de verificación de auditoría interna (ISO 9001)</label>
+<p class="hint">Si la activás, cada desvío puede vincularse a un punto de la lista: se muestra su criterio de aceptación y el requisito ISO, y salen en el PDF.</p>
 <p class="hint">Se guarda en este dispositivo y se usa en todos los informes.</p>
 </details>
 <label for="fecha" style="margin-top:0">Fecha de emisión</label><input type="date" id="fecha" style="max-width:200px">
@@ -35,6 +37,11 @@
 <h2 id="ftitle">Nuevo desvío</h2>
 <label for="sector" style="margin-top:0">Sector</label>
 <input id="sector" list="sectores" placeholder="Ej: Depósito" autocomplete="off"><datalist id="sectores"></datalist>
+<div id="ptoBox" hidden>
+<label for="pto">Punto de la lista de verificación (opcional)</label>
+<select id="pto"></select>
+<div class="pto-guia" id="ptoGuia" hidden></div>
+</div>
 <div class="row"><label class="btn" style="margin:0;color:var(--tx)">📷 Agregar fotos<input type="file" id="fotos" accept="image/*" multiple hidden></label></div>
 <div class="thumbs" id="thumbs"></div>
 <label for="desc">Descripción del desvío</label>
@@ -52,4 +59,4 @@
 <div class="row"><button class="ghost danger" id="nuevo">Empezar informe nuevo</button></div>
 <div id="msg" role="status"></div>
 </main>
-<script src="brand.js"></script><script src="config.js"></script><script src="app.js"></script></body></html>
+<script src="brand.js"></script><script src="checklist.js"></script><script src="config.js"></script><script src="app.js"></script></body></html>
