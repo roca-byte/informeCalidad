@@ -24,6 +24,11 @@ HTML + CSS + JavaScript puro, **sin frameworks ni paso de build**. Mobile-first.
 ├── sw.js                 # Service worker (caché offline)
 ├── jspdf.umd.min.js      # Librería de PDF
 ├── GUIA_MARCA.md         # Cómo cambiar logo, colores y textos
+├── docs/
+│   ├── GUIA.md           # Guía de uso con capturas
+│   ├── img/              # Capturas y demo.gif (las genera tools/demo.js)
+│   └── video/            # Video de demostración (lo genera tools/video.js)
+├── tools/                # Scripts de la guía y el video (no los carga la app)
 └── AGENTS.md             # Contexto para agentes de IA
 ```
 
@@ -36,6 +41,28 @@ python3 -m http.server 8000
 ```
 
 Abrir `http://localhost:8000`.
+
+## Guía, GIF y video
+
+Las capturas de `docs/img`, el GIF del README y el video de `docs/video` se generan con
+Playwright sobre la app real, con datos de ejemplo **inventados** (`tools/ejemplo.js`: empresa
+"Planta Demo", lotes `L-04xx` y fotos que son ilustraciones en SVG). Las páginas del PDF salen
+del PDF que genera la app. Volver a generarlos cada vez que cambie algo visible de la app o del PDF.
+
+Hace falta Node, Playwright, ffmpeg y poppler-utils (`pdftoppm`):
+
+```bash
+npm i -g playwright && npx playwright install chromium
+export NODE_PATH=$(npm root -g)   # el repo no tiene package.json
+node tools/demo.js                # capturas y GIF (unos 20 s)
+node tools/video.js               # video (unos 3 min)
+```
+
+- `tools/servidor.js`: sirve la app desde el repo en un puerto libre.
+- `tools/ejemplo.js`: datos de ejemplo (reporte diario y auditoría) y cómo se cargan en el
+  `localStorage` del navegador de la grabación. La app no los incluye: arranca vacía.
+- `tools/video.js` graba con capturas seguidas a resolución doble y descarta los cuadros que
+  salen corridos en medio de un scroll.
 
 ## Publicar
 

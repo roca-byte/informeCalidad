@@ -38,6 +38,9 @@ Replica la plantilla Word de la empresa (branding). El usuario carga empresa, lo
 ## IA
 - Se quitó (nov. 2026): la redacción propuesta no servía y casi no se usaba. No volver a agregarla sin que el usuario lo pida. En su lugar: frases rápidas (`frases.js`) y el aviso de dictado por voz del teclado del celular.
 
+## Guía y demo
+`docs/GUIA.md` (guía con capturas), `docs/img/` (capturas y `demo.gif`) y `docs/video/` se generan con `node tools/demo.js` y `node tools/video.js` (Playwright + ffmpeg + pdftoppm; ver DESARROLLO.md). Los datos de ejemplo están en `tools/ejemplo.js` y son inventados ("Planta Demo"); no agregarlos a la app. Si cambia algo visible de la app o del PDF, regenerar y revisar que la guía siga diciendo lo que la app hace.
+
 ## Reglas de trabajo
 - **Nunca** poner claves de API en el repo.
 - Al cambiar cualquier archivo, subir la versión de `V` en `sw.js` y mantener `FILES` al día.
