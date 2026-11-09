@@ -52,6 +52,7 @@
 
 <section class="card">
 <h2 id="ftitle">Nuevo desvío</h2>
+<p class="hint" style="margin:-4px 0 6px">🎤 Para dictar en vez de escribir, tocá el micrófono del teclado del celular.</p>
 <label for="sector" style="margin-top:0">Sector</label>
 <input id="sector" list="sectores" placeholder="Ej: Depósito" autocomplete="off"><datalist id="sectores"></datalist>
 <div id="ptoBox" hidden>
@@ -65,8 +66,12 @@
 <div class="thumbs" id="thumbs"></div>
 <label for="desc">Descripción del desvío</label>
 <textarea id="desc" rows="4" placeholder="Qué se ve, dónde y qué no se cumple"></textarea>
+<div class="frases" id="fr-desc"></div>
+<div class="row"><button type="button" class="ghost" id="frGuardar-desc">⭐ Guardar como frase</button><button type="button" class="ghost" id="frAdmin-desc" hidden>Quitar frases</button></div>
 <label for="acc">Acción correctiva propuesta</label>
 <textarea id="acc" rows="3" placeholder="1 o 2 acciones, una por línea (Enter entre cada una)"></textarea>
+<div class="frases" id="fr-acc"></div>
+<div class="row"><button type="button" class="ghost" id="frGuardar-acc">⭐ Guardar como frase</button><button type="button" class="ghost" id="frAdmin-acc" hidden>Quitar frases</button></div>
 <div class="row" style="margin-top:14px"><button class="primary" id="guardar">Agregar desvío</button><button class="ghost" id="cancelar" hidden>Cancelar edición</button></div>
 </section>
 
@@ -96,4 +101,4 @@
 <div class="row"><button class="ghost danger" id="nuevo">Empezar informe nuevo</button></div>
 <div id="msg" role="status"></div>
 </main>
-<script src="brand.js"></script><script src="checklist.js"></script><script src="auditoria.js"></script><script src="app.js"></script></body></html>
+<script src="brand.js"></script><script src="checklist.js"></script><script src="auditoria.js"></script><script src="frases.js"></script><script src="app.js"></script></body></html>

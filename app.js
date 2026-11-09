@@ -39,6 +39,7 @@ if(!cfg.empresa&&!cfg.logo)$('cfg').open=true;
 pintarCfg();
 
 Aud.init();   // auditoria.js: lista de verificación, trazabilidad y conclusión (modo opcional)
+Frases.init();   // frases.js: botones de frases típicas y propias para redactar rápido
 
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){msg('No hay espacio para guardar el borrador en el celular. Generá el PDF antes de seguir.')}}
 
@@ -67,7 +68,8 @@ $('guardar').onclick=()=>{
   const it={sector:$('sector').value.trim(),desc:$('desc').value.trim(),acc:$('acc').value.trim(),fotos:fotos.slice()};
   // Al editar sin cambiar de punto se conserva la copia original del punto
   const viejo=editIdx!==null?items[editIdx]:{},prev=viejo.pto,p=Aud.puntos[$('pto').value];
-  if(prev&&String(prev.n)===$('pto').value)it.pto=prev;else if(p)it.pto={...p};
+  if(prev&&String(prev.n)===$('pto').value)it.pto=prev;
+  else if(p)it.pto={n:p.n,p:p.p,c:p.c,r:p.r,...(p.ej?{ej:true}:{})};   // copia sin las frases (no hacen falta en el informe)
   // Tipo de hallazgo: solo con el bloque de auditoría visible (si no, se conserva el que tenía)
   if(!$('ptoBox').hidden)it.tipo=$('tipo').value;else if(viejo.tipo)it.tipo=viejo.tipo;
   if(!it.sector&&!it.desc&&!it.fotos.length){msg('Cargá al menos el sector, una foto o una descripción.');return}
@@ -308,4 +310,4 @@ $('pdf').onclick=async()=>{
 };
 render();
 
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=15'));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=16'));

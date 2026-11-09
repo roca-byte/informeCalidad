@@ -57,3 +57,9 @@ h3.cat{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(-
 .e-C.on{background:#1e7d4f;border-color:#1e7d4f;color:#fff}
 .e-NC.on{background:#b3261e;border-color:#b3261e;color:#fff}
 .e-NA.on,.e-NV.on{background:#5c7077;border-color:#5c7077;color:#fff}
+/* Frases rápidas: botones que agregan texto a la descripción o a la acción */
+.frases{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.fr-tit{width:100%;margin:6px 0 0;font-size:.78rem;color:var(--mut)}
+button.frase{min-height:44px;padding:8px 12px;font-size:.88rem;text-align:left;border-radius:10px;background:var(--card2)}
+button.frase.tipica{border-color:var(--ac);background:var(--ac-soft)}
+button.frase.borrar{color:var(--dg);border-style:dashed}

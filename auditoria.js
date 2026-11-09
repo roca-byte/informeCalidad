@@ -111,6 +111,7 @@ const Aud={
     // Orienta la redacción: el hallazgo describe qué se ve que NO cumple el criterio
     if(p)$('ptoGuia').innerHTML=`<b>Criterio de aceptación:</b> ${esc(p.c)}<br><b>Requisito ISO 9001:2015:</b> ${esc(p.r)}`;
     $('desc').placeholder=p?'Qué se ve que no cumple el criterio, dónde y con qué evidencia':'Qué se ve, dónde y qué no se cumple';
+    Frases.pintar();   // las frases típicas cambian con el punto elegido
   },
 
   pintarChips(){

@@ -10,6 +10,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 
 - **Configuración de la empresa** (panel ⚙️): nombre de la empresa, logo y departamento. Se cargan una sola vez desde la app, quedan guardados en el dispositivo y se usan en todos los informes. Se abre solo la primera vez.
 - **Carga de desvíos en el momento**: sector (con autocompletado de sectores ya usados), fotos de la cámara o galería, descripción y acciones correctivas.
+- **Frases rápidas**: botones con frases típicas de cada punto de la lista de auditoría y frases propias guardadas (⭐), para redactar sin escribir todo. También se puede dictar con el micrófono del teclado.
 - **Fotos**: se reducen a 1200 px (JPEG) y se pueden reordenar o quitar antes de guardar.
 - **Edición**: cada desvío guardado se puede editar o eliminar antes de generar el informe.
 - **PDF automático** (jsPDF) con el formato de la plantilla de la empresa:
@@ -36,7 +37,8 @@ HTML + CSS + JavaScript puro, **sin frameworks ni paso de build**. Mobile-first.
 ├── style.css             # Estilos y temas
 ├── app.js                # Lógica: carga, fotos, PDF
 ├── auditoria.js          # Modo auditoría interna (opcional)
-├── checklist.js          # Lista de verificación de auditoría
+├── checklist.js          # Lista de verificación de auditoría (con frases típicas)
+├── frases.js             # Frases rápidas (típicas y propias)
 ├── brand.js              # Marca: empresa, color de acento y textos fijos del PDF
 ├── manifest.json         # Configuración PWA
 ├── sw.js                 # Service worker (caché offline)
