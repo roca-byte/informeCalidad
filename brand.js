@@ -18,6 +18,10 @@ const BRAND = {
   // Tercera línea del encabezado (debajo de la fecha y el nombre).
   departamento: 'DEPARTAMENTO DE CALIDAD',
 
+  // Modo auditoría interna: título y objetivo propios (el resto de la portada es igual).
+  tituloAuditoria: 'INFORME DE AUDITORÍA\nINTERNA DE PLANTA',
+  objetivoAuditoria: 'Objetivo de la auditoría. Verificar que las actividades de planta se realizan según el sistema de gestión de la calidad y los requisitos de la norma ISO 9001:2015, determinar el grado de cumplimiento de la lista de verificación e identificar no conformidades, observaciones y oportunidades de mejora.',
+
   // Párrafo fijo que va debajo del encabezado, antes del primer desvío.
   objetivo: 'Objetivo del relevamiento. Se presenta evidencia fotográfica del estado de la planta al día de la fecha, organizada por sector para facilitar la lectura, el seguimiento de desvíos y la identificación de condiciones a corregir.'
 };

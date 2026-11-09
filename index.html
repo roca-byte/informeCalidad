@@ -7,7 +7,6 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('informe_tema');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="jspdf.umd.min.js"></script>
 </head><body>
 <header class="q-topbar">
@@ -17,7 +16,6 @@
       <h1>Informe de Estado de Planta</h1>
     </div>
   </div>
-  <button class="q-theme" id="tema" aria-label="Cambiar tema claro/oscuro">🌙</button>
 </header>
 <main>
 <img id="logoImg" src="logo.png" alt="" hidden>
@@ -26,18 +24,39 @@
 <label>Logo de la empresa (opcional, reemplaza al nombre en el encabezado)</label>
 <div class="row" style="margin-top:0;align-items:center"><img id="logoPrev" alt="Logo cargado" hidden><label class="btn" style="margin:0;color:var(--tx)">🖼️ <span id="logoTxt">Elegir logo</span><input type="file" id="logoFile" accept="image/*" hidden></label><button class="ghost danger" id="logoQuitar" hidden>Quitar logo</button></div>
 <label for="depto">Departamento (tercera línea de la portada)</label><input id="depto" style="max-width:280px">
-<label class="chk"><input type="checkbox" id="auditoria"> Usar la lista de verificación de auditoría interna (ISO 9001)</label>
-<p class="hint">Si la activás, cada desvío puede vincularse a un punto de la lista: se muestra su criterio de aceptación y el requisito ISO, y salen en el PDF.</p>
+<label class="chk"><input type="checkbox" id="auditoria"> Modo auditoría interna (ISO 9001)</label>
+<p class="hint">Para la auditoría semanal (o cuando toque): agrega la lista de verificación por sector, el tipo de hallazgo, el ejercicio de trazabilidad opcional, la conclusión y las firmas. Apagado, la app arma el reporte diario de siempre.</p>
+<div class="solo-aud" hidden>
+<label for="codigo">Código del registro</label><input id="codigo" placeholder="Ej: REG-XX" style="max-width:200px">
+<label for="revision">Revisión del registro</label><input id="revision" placeholder="Ej: 00" style="max-width:120px">
+<label for="sectoresCfg">Sectores de la planta (uno por línea)</label><textarea id="sectoresCfg" rows="4" placeholder="Depósito&#10;Envasado&#10;Formulación"></textarea>
+</div>
 <p class="hint">Se guarda en este dispositivo y se usa en todos los informes.</p>
 </details>
 <label for="fecha" style="margin-top:0">Fecha de emisión</label><input type="date" id="fecha" style="max-width:200px">
 <label for="nombre">Nombre y apellido (va en el encabezado y pie del PDF)</label><input id="nombre" placeholder="Ej: Roca Maximiliano" style="max-width:280px;margin-bottom:14px">
+
+<section class="card solo-aud" hidden>
+<h2>Datos de la auditoría</h2>
+<label for="audHora" style="margin-top:0">Hora de inicio</label><input type="time" id="audHora" style="max-width:160px">
+<label for="audAuditados">Auditados (responsables de sector presentes)</label><input id="audAuditados" placeholder="Ej: J. Pérez (Envasado), M. Gómez (Depósito)">
+</section>
+
+<section class="card solo-aud" hidden>
+<h2>Lista de verificación por sector</h2>
+<p class="hint" style="margin-top:0">C = cumple · NC = no cumple · N/A = no aplica · NV = no verificado. Tocá de nuevo una marca para borrarla. Al guardar una no conformidad con punto, el punto se marca NC solo.</p>
+<div class="row" id="secChips"></div>
+<label for="secAud">Sector a verificar</label><input id="secAud" list="sectores" placeholder="Elegí o escribí el sector" autocomplete="off">
+<div id="matriz"></div>
+</section>
 
 <section class="card">
 <h2 id="ftitle">Nuevo desvío</h2>
 <label for="sector" style="margin-top:0">Sector</label>
 <input id="sector" list="sectores" placeholder="Ej: Depósito" autocomplete="off"><datalist id="sectores"></datalist>
 <div id="ptoBox" hidden>
+<label for="tipo">Tipo de hallazgo</label>
+<select id="tipo"><option value="NC">No conformidad</option><option value="OBS">Observación</option><option value="OM">Oportunidad de mejora</option></select>
 <label for="pto">Punto de la lista de verificación (opcional)</label>
 <select id="pto"></select>
 <div class="pto-guia" id="ptoGuia" hidden></div>
@@ -55,8 +74,28 @@
 
 <h2>Desvíos de la recorrida (<span id="n">0</span>)</h2>
 <div id="lista"></div>
+
+<section class="card solo-aud" hidden>
+<h2>Ejercicio de trazabilidad (opcional)</h2>
+<label class="chk" style="margin-top:0"><input type="checkbox" id="trUsar"> Incluir en este informe</label>
+<div id="trBox" hidden>
+<p class="hint">Elegí un lote de producto terminado y pedí los registros: hacia atrás (qué materias primas se usaron, de qué lotes y proveedores) y hacia adelante (a qué clientes se despachó). Si no se puede reconstruir, cargá también un hallazgo con el punto 38.</p>
+<label for="trProd">Producto</label><input id="trProd" data-t="producto">
+<label for="trLote">Lote de producto terminado</label><input id="trLote" data-t="lote">
+<label for="trAtras">Hacia atrás: materias primas, lotes y proveedores</label><textarea id="trAtras" data-t="atras" rows="3" placeholder="Una materia prima por línea: nombre · lote · proveedor"></textarea>
+<label for="trAdel">Hacia adelante: despachos y clientes</label><textarea id="trAdel" data-t="adelante" rows="3" placeholder="Un despacho por línea: remito · cliente · cantidad"></textarea>
+<label for="trTiempo">Tiempo que llevó reunir la información</label><input id="trTiempo" data-t="tiempo" placeholder="Ej: 40 min" style="max-width:200px">
+<label>Resultado</label><div class="row" id="trRes" style="margin-top:0"><button data-r="C" class="e-C">Conforme</button><button data-r="NC" class="e-NC">No conforme</button></div>
+<label for="trObs">Observaciones</label><textarea id="trObs" data-t="obs" rows="2"></textarea>
+</div>
+</section>
+
+<section class="card solo-aud" hidden>
+<h2>Conclusión del auditor</h2>
+<textarea id="audConclusion" rows="4" placeholder="Grado de cumplimiento general, aspectos a destacar, no conformidades principales y recomendación"></textarea>
+</section>
 <button class="primary big" id="pdf">Generar PDF</button>
 <div class="row"><button class="ghost danger" id="nuevo">Empezar informe nuevo</button></div>
 <div id="msg" role="status"></div>
 </main>
-<script src="brand.js"></script><script src="checklist.js"></script><script src="config.js"></script><script src="app.js"></script></body></html>
+<script src="brand.js"></script><script src="checklist.js"></script><script src="config.js"></script><script src="auditoria.js"></script><script src="app.js"></script></body></html>

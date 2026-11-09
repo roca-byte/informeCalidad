@@ -8,13 +8,16 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 ## Stack y restricciones
 - HTML + CSS + JavaScript puro. **Sin frameworks ni paso de build.**
 - Mobile-first, funciona offline (service worker con caché). PDF con jsPDF 2.5.1 incluido local (`jspdf.umd.min.js`).
-- Datos en `localStorage`: desvíos en `informe_planta_v1`; configuración de la empresa en `informe_config` (`{empresa, depto, logo:{d,w,h}}`, logo en PNG reducido a máx. 800x300 px); fotos reducidas a 1200 px, JPEG.
+- Datos en `localStorage`: desvíos en `informe_planta_v1`; auditoría en `informe_auditoria_v1`; configuración de la empresa en `informe_config` (`{empresa, depto, logo:{d,w,h}}`, logo en PNG reducido a máx. 800x300 px); fotos reducidas a 1200 px, JPEG.
 - Hosting: GitHub Pages (rutas siempre **relativas**). Interfaz y comentarios en español.
 - Alcance mínimo (MVP): no agregar funciones no pedidas ni dependencias nuevas sin avisar.
 
 ## Archivos
 - `index.html`, `style.css`, `app.js`: la app. `config.js`: URL del Worker (`IA_ENDPOINT`).
-- `checklist.js`: lista de verificación de auditoría interna ISO 9001 (global `CHECKLIST`, 30 puntos por categoría; solo auditoría, los controles del lote en línea van en controlLinea; numeración del Excel REG-XX). Opcional: se activa en Configuración (`cfg.auditoria`). Cada desvío puede guardar una **copia** del punto en `pto` (`{n,p,c,r}`) para que los informes viejos no cambien si se edita la lista; en el PDF sale bajo el título del desvío (punto, criterio y requisito ISO) y también se pasa como contexto a la IA. Al final del PDF, si algún desvío tiene punto, va un "RESUMEN POR PUNTO DE LA LISTA" (punto, requisito ISO y N° de desvíos).
+- `checklist.js`: lista de verificación de auditoría interna ISO 9001 (global `CHECKLIST`). 30 puntos de auditoría con la numeración del Excel REG-XX (faltan 7, 8 y 17-21: son controles del lote en línea y van en controlLinea) + el 38, ejercicio de trazabilidad opcional (`ej:true`: uno por auditoría, no entra en la lista por sector).
+- `auditoria.js`: **modo auditoría interna** (opcional, `cfg.auditoria`; global `Aud`). Datos en `localStorage` `informe_auditoria_v1`: `{hora, auditados, conclusion, matriz:{sector:{est:{n:'C'|'NC'|'NA'|'NV'}, lote, notifica, motivo}}, traza:{usar, producto, lote, atras, adelante, tiempo, resultado, obs}}`. En `cfg`: `codigo`, `revision`, `sectores` (texto, uno por línea; no van en el repo). Se carga antes que `app.js` pero solo define funciones: `Aud.init()` se llama desde `app.js`. Cada desvío en modo auditoría guarda `tipo` (`NC`/`OBS`/`OM`) y una **copia** del punto en `pto` (`{n,p,c,r}`), así los informes viejos no cambian si se edita la lista. El N° de hallazgo (`NC-AAMMDD-01`) se calcula con `Aud.ids()`, no se guarda. Una NC con punto marca ese punto como NC en la hoja del sector.
+  - PDF en modo auditoría (orden): portada con código/rev., hora y auditor → objetivo, alcance, criterios y auditados (ISO 19011 6.5.1) → resultados por sector (% = C/(C+NC), como el Excel) → hallazgos → trazabilidad → resumen por punto → conclusión → firmas (auditor y responsable de calidad) → anexo con la lista por sector (columnas S1…S8, repite cabecera al saltar de página). Pie "Auditoría interna REG-XX Rev. 00 · fecha | nombre | Página N de T". Apagado, el PDF es el reporte diario de siempre.
+  - **Trampa ya resuelta:** el sector de la lista se actualiza con `input`, no con `change`; `change` llega al tocar un botón y redibujaba la lista justo antes del toque, que se perdía.
 - `brand.js`: nombre de empresa, color de acento y textos fijos del PDF. `logo.png`: logo opcional (no incluido en el repo).
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA.
 - `worker.js`: Cloudflare Worker que usa el binding de Workers AI (no lo carga la app).
@@ -36,6 +39,9 @@ Replica la plantilla Word de la empresa (branding). El usuario carga empresa, lo
 - Flujo: `app.js` (`mejorar()` / `askAI()`) → Worker (`X-App-Token`) → Workers AI (modelo definido en `worker.js`).
 - Los prompts están en `mejorar()`. La IA reescribe texto; **no recibe fotos**. El resultado queda editable y con "Deshacer".
 - Si `IA_ENDPOINT` está vacío, los botones de IA quedan ocultos.
+
+- **Fecha:** siempre local (`hoy()` en `app.js`), nunca `toISOString()`: es UTC y después de las 21 h (Argentina) daba el día siguiente.
+- **Tema:** sigue al del sistema con `prefers-color-scheme` (el botón claro/oscuro se sacó).
 
 ## Reglas de trabajo
 - **Nunca** poner claves de API en el repo: viven como secrets en Cloudflare.

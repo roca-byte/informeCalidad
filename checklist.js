@@ -5,6 +5,7 @@
 // Solo puntos de auditoría (si el sistema funciona). Los controles del lote que se está
 // envasando (QR, lote/vencimiento impreso, ID de pallet, despeje de la línea) van en
 // controlLinea. Se mantienen los números del Excel REG-XX, por eso faltan el 7, 8 y 17 a 21.
+// El 38 (ejercicio de trazabilidad) no está en el Excel: se agregó como opcional.
 const CHECKLIST = [
   {cat:'Orden y limpieza', items:[
     {n:1, p:'Piso y área de trabajo limpios', c:'Sin residuos, producto, envases ni materiales fuera de lugar', r:'7.1.4 Ambiente de los procesos'},
@@ -47,5 +48,9 @@ const CHECKLIST = [
     {n:35, p:'Muestras de retención identificadas', c:'Cada lote tiene su muestra identificada y guardada según procedimiento', r:'8.6 / 8.5.2'},
     {n:36, p:'Envases vacíos gestionados', c:'Triple lavado y disposición según procedimiento; sin acumulación (si aplica)', r:'8.7 / 7.1.4'}]},
   {cat:'Aduana (solo en ese sector)', items:[
-    {n:37, p:'Mercadería bajo régimen aduanero controlada', c:'Sellos íntegros, ubicación identificada y registros de ingreso/egreso al día', r:'8.5.4 / 8.5.2'}]}
+    {n:37, p:'Mercadería bajo régimen aduanero controlada', c:'Sellos íntegros, ubicación identificada y registros de ingreso/egreso al día', r:'8.5.4 / 8.5.2'}]},
+  // ej:true = ejercicio que se hace una vez por auditoría (no por sector): no entra en la
+  // lista por sector. Se vincula a un hallazgo solo si el ejercicio sale mal.
+  {cat:'Trazabilidad (ejercicio opcional)', items:[
+    {n:38, ej:true, p:'Trazabilidad de un lote verificable', c:'Para un lote de PT elegido se identifican con registros las materias primas usadas (lotes y proveedores) y los clientes a los que se despachó', r:'8.5.2 Identificación y trazabilidad'}]}
 ];
