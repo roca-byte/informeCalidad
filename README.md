@@ -6,7 +6,12 @@ App para armar el **Informe de Estado de Planta** (desvíos de calidad) desde el
 durante la recorrida. Cargás cada desvío con sus fotos y la app genera un **PDF** prolijo,
 con las fotos acomodadas solas, listo para mandar.
 
-**Abrir la app:** https://roca-byte.github.io/informeCalidad/
+**Abrir la app:** https://roca-byte.github.io/informeCalidad/ · [Video (2:19)](docs/video/informeCalidad-demo.mp4) · [Guía de uso](docs/GUIA.md)
+
+<p align="center"><img src="docs/img/demo.gif" alt="Recorrido: cargar un desvío con fotos y agregarlo al informe" width="280"></p>
+
+> ¿Querés verla funcionando sin cargar nada? Mirá el [video](docs/video/informeCalidad-demo.mp4)
+> o la [guía con capturas](docs/GUIA.md): usan una empresa de ejemplo con datos inventados.
 
 ## Para qué sirve
 
