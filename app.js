@@ -1,5 +1,4 @@
 const KEY='informe_planta_v1',NKEY='informe_nombre',$=id=>document.getElementById(id);
-const aiEndpoint=typeof IA_ENDPOINT==='string'&&IA_ENDPOINT.trim()?IA_ENDPOINT:'https://informe-planta-ia.myworker-dev.workers.dev';
 let items=[],fotos=[],editIdx=null,sample=null,dls=null;
 try{items=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}
 // Fecha LOCAL: toISOString() da la fecha en UTC y en Argentina después de las 21 h marcaba el día siguiente
@@ -11,7 +10,8 @@ const hex2rgb=h=>{const n=parseInt(h.replace('#',''),16);return [(n>>16)&255,(n>
 const msg=t=>{$('msg').textContent=t};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // Tema: sigue al del sistema (claro u oscuro) desde style.css; ya no hay botón
-try{localStorage.removeItem('informe_tema')}catch(e){}
+// Limpieza de claves que ya no se usan (tema manual y código de acceso de la IA, ya quitados)
+try{['informe_tema','informe_ia_token'].forEach(k=>localStorage.removeItem(k))}catch(e){}
 /* Configuración de la empresa: se guarda en el dispositivo y aplica a todos los informes */
 const CKEY='informe_config';
 let cfg={};try{cfg=JSON.parse(localStorage.getItem(CKEY)||'{}')}catch(e){}
@@ -61,8 +61,7 @@ $('thumbs').addEventListener('click',e=>{
 
 function resetForm(){
   editIdx=null;fotos=[];['sector','desc','acc','pto'].forEach(k=>$(k).value='');$('tipo').value='NC';Aud.pintarForm();
-  $('ftitle').textContent='Nuevo desvío';$('guardar').textContent='Agregar desvío';$('cancelar').hidden=true;
-  $('undo-desc').hidden=$('undo-acc').hidden=true;drawThumbs();
+  $('ftitle').textContent='Nuevo desvío';$('guardar').textContent='Agregar desvío';$('cancelar').hidden=true;drawThumbs();
 }
 $('guardar').onclick=()=>{
   const it={sector:$('sector').value.trim(),desc:$('desc').value.trim(),acc:$('acc').value.trim(),fotos:fotos.slice()};
@@ -98,37 +97,6 @@ $('lista').addEventListener('click',e=>{
 });
 $('nuevo').onclick=()=>{if(confirm('Se borran todos los desvíos cargados'+(Aud.activo()?' y los datos de la auditoría (lista por sector, trazabilidad, conclusión)':'')+'. ¿Empezar un informe nuevo?')){items=[];persist();Aud.reiniciar();resetForm();render();msg('')}};
 
-/* IA: mejora el texto y lo deja editable */
-if(aiEndpoint)document.querySelectorAll('.ia').forEach(b=>b.hidden=false);
-const TKEY='informe_ia_token';
-async function askAI(prompt,onText){
-  let tk='';try{tk=localStorage.getItem(TKEY)||''}catch(e){}
-  if(!tk){tk=(window.prompt('Código de acceso a la IA (el APP_TOKEN que configuraste en el Worker):')||'').trim();if(!tk)throw {code:'sin_codigo'};try{localStorage.setItem(TKEY,tk)}catch(e){}}
-  const r=await fetch(aiEndpoint,{method:'POST',headers:{'Content-Type':'application/json','X-App-Token':tk},body:JSON.stringify({prompt})});
-  if(r.status===401){try{localStorage.removeItem(TKEY)}catch(e){}throw {code:'codigo_incorrecto'}}
-  if(!r.ok)throw {code:'http_'+r.status};
-  const t=(((await r.json()).text)||'').trim();if(onText)onText({text:t});return {text:t};
-}
-async function mejorar(k){
-  if(!aiEndpoint){msg('La IA todavía no está configurada.');return}
-  const ta=$(k),orig=ta.value.trim();if(!orig){msg('Escribí algo primero y después lo mejoro.');return}
-  const b=$('ia-'+k);b.disabled=true;b.textContent='Pensando…';ta.dataset.prev=ta.value;
-  const reglas=k==='desc'
-    ?'Reescribí la descripción de un desvío de calidad en planta: 2 a 4 líneas que digan qué se ve, dónde y qué norma o buena práctica no se cumple.'
-    :'Reescribí la acción correctiva propuesta: máximo 2 acciones, cada una en su propia línea (sin números ni viñetas), con verbo + qué hacer + con qué, en lenguaje claro y no muy técnico. No uses los nombres en japonés de las 5S (Seiri, Seiton, etc.).';
-  const otro=k==='desc'?$('acc').value:$('desc').value,p=Aud.puntos[$('pto').value];
-  const ref=p?`\nPunto de la lista de verificación de auditoría: ${p.p}. Criterio de aceptación: ${p.c}. Requisito ISO 9001:2015: ${p.r}. Relacioná el texto con ese criterio sin inventar hechos.`:'';
-  const prompt=`Sos asistente de un Checker de Calidad en una planta. ${reglas} Mantené los hechos del texto original y no inventes datos. Español claro y profesional. Respondé SOLO con el texto final, sin comillas ni explicaciones.\nSector: ${$('sector').value||'(sin indicar)'}\nContexto (el otro campo del desvío): ${otro||'(vacío)'}${ref}\nTexto original:\n${orig}`;
-  try{
-    const r=await askAI(prompt,({text})=>{ta.value=text});
-    ta.value=r.text.trim();$('undo-'+k).hidden=false;msg('Listo. Podés editar el texto o deshacer.');
-  }catch(e){ta.value=ta.dataset.prev;msg(e&&e.code==='not_granted'?'Necesito tu permiso para usar la IA.':'No se pudo mejorar el texto ('+(e&&e.code||'error')+').')}
-  b.disabled=false;b.textContent='✨ Mejorar con IA';
-}
-['desc','acc'].forEach(k=>{
-  $('ia-'+k).onclick=()=>mejorar(k);
-  $('undo-'+k).onclick=()=>{$(k).value=$(k).dataset.prev||'';$('undo-'+k).hidden=true};
-});
 
 /* PDF: encabezado de marca en cada página, desvíos en flujo continuo, pie con página.
    Con el modo auditoría suma: datos de la auditoría, resultados por sector, tipo y N° de
@@ -340,4 +308,4 @@ $('pdf').onclick=async()=>{
 };
 render();
 
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=14'));
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=15'));
