@@ -2,6 +2,9 @@
 // Es opcional: se activa en ⚙️ Configuración. Cada punto orienta el desvío con su
 // criterio de aceptación y el requisito de la norma. Editá esta lista para ajustarla
 // a tu planta (n = número, p = punto a verificar, c = criterio, r = requisito ISO).
+// Solo puntos de auditoría (si el sistema funciona). Los controles del lote que se está
+// envasando (QR, lote/vencimiento impreso, ID de pallet, despeje de la línea) van en
+// controlLinea. Se mantienen los números del Excel REG-XX, por eso faltan el 7, 8 y 17 a 21.
 const CHECKLIST = [
   {cat:'Orden y limpieza', items:[
     {n:1, p:'Piso y área de trabajo limpios', c:'Sin residuos, producto, envases ni materiales fuera de lugar', r:'7.1.4 Ambiente de los procesos'},
@@ -11,9 +14,7 @@ const CHECKLIST = [
   {cat:'Derrames', items:[
     {n:5, p:'Ausencia de derrames', c:'Sin pérdidas de producto, MP o líquidos', r:'8.5.4 Preservación'},
     {n:6, p:'Derrames correctamente gestionados', c:'Contenidos, limpiados e informados', r:'8.5.4 / 8.7'}]},
-  {cat:'Despeje de línea / contaminación cruzada', items:[
-    {n:7, p:'Línea libre de restos de producciones anteriores', c:'Sin restos ni productos incompatibles de producciones anteriores', r:'8.5.1 Control de la producción'},
-    {n:8, p:'Sin packaging de productos anteriores en la línea', c:'No debe haber envases, tapas ni etiquetas de otros productos en la línea', r:'8.5.1 / 8.5.2'},
+  {cat:'Despeje de línea', items:[
     {n:9, p:'Despeje de línea verificado y registrado', c:'Al cambiar de producto, la verificación de despeje queda registrada y firmada', r:'8.5.1 / 7.5.3'}]},
   {cat:'Scrap / residuos', items:[
     {n:10, p:'Scrap correctamente segregado', c:'Identificado, contenido y ubicado en sector definido', r:'8.7 Salidas no conformes'},
@@ -24,12 +25,6 @@ const CHECKLIST = [
     {n:14, p:'Producto en proceso identificado', c:'Producto/lote/estado claramente identificable', r:'8.5.2 Identificación y trazabilidad'},
     {n:15, p:'PT correctamente identificado', c:'Producto, lote y estado (liberado / retenido) visibles en cada pallet o unidad almacenada', r:'8.5.2 / 8.6'},
     {n:16, p:'Material retenido / no conforme identificado', c:'Segregado, con estado visible (retenido/rechazado) y registrado', r:'8.7 Salidas no conformes'}]},
-  {cat:'QR / lote', items:[
-    {n:17, p:'QR cargado/activo', c:'Información disponible y correcta', r:'8.5.2 Identificación y trazabilidad'},
-    {n:18, p:'Código QR impreso legible', c:'Impreso sin daños, escaneable y en la ubicación definida en el instructivo', r:'8.5.2 Identificación y trazabilidad'},
-    {n:19, p:'Datos del QR coinciden con documentación', c:'Producto, lote, fecha de vencimiento y cantidad coinciden con la orden de producción', r:'8.5.2 / 7.5'},
-    {n:20, p:'ID de pallet correcto', c:'El ID del pallet está asociado a un único lote y producto en el sistema', r:'8.5.2 Identificación y trazabilidad'},
-    {n:21, p:'Lote y vencimiento impresos en el envase', c:'Impresos en texto (no solo en el QR), legibles y coincidentes con la orden', r:'8.5.2 / 8.6'}]},
   {cat:'Registros y documentación', items:[
     {n:22, p:'Documentación vigente en el puesto', c:'Orden de producción, instructivo o especificación disponibles y en su versión vigente', r:'7.5.3 Control de la información documentada'},
     {n:23, p:'Registros de producción completos', c:'Datos, cantidades, lote, firmas/identificación', r:'7.5.3 / 8.5.1'},
