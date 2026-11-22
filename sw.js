@@ -1,5 +1,5 @@
 // Subí el número de versión cada vez que cambies cualquier archivo de la app
-const V='informe-planta-v24';
+const V='informe-planta-v25';
 const FILES=['./','index.html','style.css','app.js','brand.js','checklist.js','auditoria.js','frases.js','jspdf.umd.min.js','manifest.json','qualityos.svg','icon.svg','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 // Las apps de la suite comparten dominio (roca-byte.github.io) y por eso comparten las cachés:
