@@ -7,7 +7,7 @@ PWA para armar rápido el **Informe de Estado de Planta** (desvíos de calidad) 
 
 ## Stack y restricciones
 - HTML + CSS + JavaScript puro. **Sin frameworks ni paso de build.**
-- Mobile-first, funciona offline (service worker con caché). PDF con jsPDF 2.5.1 incluido local (`jspdf.umd.min.js`).
+- Mobile-first, funciona offline (service worker con caché). PDF con jsPDF 4.2.1 incluido local (`jspdf.umd.min.js`).
 - Datos en `localStorage`: desvíos en `informe_planta_v1`; auditoría en `informe_auditoria_v1`; configuración de la empresa en `informe_config` (`{empresa, depto, logo:{d,w,h}}`, logo en PNG reducido a máx. 800x300 px); fotos reducidas a 1200 px, JPEG.
 - Hosting: GitHub Pages (rutas siempre **relativas**). Interfaz y comentarios en español.
 - Alcance mínimo (MVP): no agregar funciones no pedidas ni dependencias nuevas sin avisar.

@@ -7,7 +7,7 @@ Información técnica para quien quiera modificar o publicar la app. Para usarla
 
 HTML + CSS + JavaScript puro, **sin frameworks ni paso de build**. Mobile-first.
 
-- [jsPDF](https://github.com/parallax/jsPDF) 2.5.1 incluido de forma local (`jspdf.umd.min.js`).
+- [jsPDF](https://github.com/parallax/jsPDF) 4.2.1 incluido de forma local (`jspdf.umd.min.js`).
 - Hosting pensado para GitHub Pages (rutas relativas).
 
 ## Estructura
